@@ -3,127 +3,103 @@ session_start();
 $id_usuario = $_SESSION['user_id'];
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Libro Mayor</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
 </head>
 
-<body>
+<body class="bg-light">
 
-    <?php include './nav.php' ?>
-    <div class="container border border-primary-light pt-2 pb-2 mb-5 mt-5 bg-light text-dark">
-        <div class="container d-flex mt-3">
-            <button type="submit" name="button" class="btn" onclick="goBack()"><i
-                    class="bi bi-caret-left-fill"></i></button>
-            <script>
-                function goBack() {
-                    window.history.go(-1);
-                }
-            </script>
-            <div class="container d-flex justify-content-center mb-2">
-                <h1><b>Libro Mayor</b></h1>
-            </div>
-        </div>
-        <hr class="container mt-4 mb-2 d-flex justify-content-center" style="width:70%">
-        </hr>
-        <div class="col-10 p-4 container text-center">
+    <?php include './nav.php'; ?>
 
-            <form action="" method="get">
-                <label for="tipo" class="form-label">Seleccionar cuenta: </label>
-                <div class="container d-flex justify-content-center mb-3">
-                    <select class="form-control-sm" name="busqueda" id="busqueda">
-                        <option value="busqueda">
+    <div class="container my-5">
+        <div class="card shadow-sm rounded">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <button class="btn btn-outline-secondary me-3" onclick="window.history.back();">
+                        <i class="bi bi-caret-left-fill"></i>
+                    </button>
+                    <h2 class="m-0 text-center flex-grow-1">Libro Mayor</h2>
+                </div>
+                <hr>
+
+                <form action="" method="get" class="text-center mb-4">
+                    <label for="busqueda" class="form-label">Seleccionar cuenta:</label>
+                    <div class="d-flex justify-content-center">
+                        <select class="form-select w-auto" name="busqueda" id="busqueda" required>
+                            <option value="">Seleccione...</option>
                             <?php
                             include "conexionPDC.php";
-                            $sql = $conexion->query("SELECT nombre, nro_cuenta,tipo,recibe_saldo  from cuenta ORDER BY nro_cuenta ASC");
+                            $sql = $conexion->query("SELECT nombre, nro_cuenta, tipo, recibe_saldo FROM cuenta ORDER BY nro_cuenta ASC");
                             while ($datos = $sql->fetch_object()) {
-                                $tipo_cuenta= $datos->tipo;
-                            if ($datos->recibe_saldo == 1 && ($datos->tipo=="Ac" || $datos->tipo=="Pa")) {
-                                echo '<option value="' . $datos->nombre . '">' . $datos->nombre . '  > -Numero de cuenta: ' . $datos->nro_cuenta . '  > -Tipo: '.$tipo_cuenta.'</option>';
+                                if ($datos->recibe_saldo == 1 && ($datos->tipo == "Ac" || $datos->tipo == "Pa")) {
+                                    echo '<option value="' . $datos->nombre . '">' . $datos->nombre . ' - N°: ' . $datos->nro_cuenta . ' - Tipo: ' . $datos->tipo . '</option>';
+                                }
                             }
-                        }
                             ?>
-                        </option>
-                    </select>
+                        </select>
+                        <button type="submit" class="btn btn-primary ms-3" name="enviar">Buscar</button>
+                    </div>
+                </form>
 
-                    <div class="d-flex ms-2 ">
-
-                        <button type="submit" class="btn btn-primary" name="enviar">Buscar</button>
-            </form>
-        </div>
-    </div>
-    <table class="table table-bordered">
-
-        <thead class="table-info">
-            <tr>
-                <th scope="col">Nro de Asiento</th>
-                <th scope="col">Descripción</th>
-                <th scope="col">Debe</th>
-                <th scope="col">Haber</th>
-                <th scope="col">Total</th>
-            </tr>
-        </thead>
-
-        <tbody>
-        <tbody>
-            <?php
-            include "conexionPDC.php";
-            if (isset($_GET['enviar'])) {
-                if (isset($_GET['busqueda'])) {
+                <?php
+                if (isset($_GET['enviar']) && !empty($_GET['busqueda'])) {
                     $busqueda = $_GET['busqueda'];
                     $sql_cuenta = $conexion->query("SELECT id_cuenta, saldo_final FROM cuenta WHERE nombre LIKE '%$busqueda'");
-                    if ($sql_cuenta) {
+                    if ($sql_cuenta && $sql_cuenta->num_rows > 0) {
                         $datos_cuenta = $sql_cuenta->fetch_object();
                         $id_cuenta = $datos_cuenta->id_cuenta;
-                        $sql_cruce_tablas = $conexion->query("SELECT a.id_asiento, a.descripcion, r.debe, r.haber, r.saldo_parcial, r.id_cuenta
-                                                                        FROM asiento a 
-                                                                        inner join registrar_asiento r 
-                                                                        ON a.id_asiento = r.id_asiento
-                                                                        where r.id_cuenta = $id_cuenta ");
-                        if ($sql_cruce_tablas) { //Tengo que conseguir el numero de cuenta, a traves del input, buscarlo en la tabla cuenta y traer el id_cuenta
-                            $sql_nombre_cuenta = $conexion->query("SELECT nombre FROM cuenta WHERE id_cuenta = $id_cuenta");
-                            $dato_cuenta = $sql_nombre_cuenta->fetch_object();
-                            $nombre_cuenta = $dato_cuenta->nombre;
-                            echo "Cuenta: " . $nombre_cuenta;
-                            while ($datos_libro_mayor = $sql_cruce_tablas->fetch_assoc()) {
-                                ?>
-                                <tr>
-                                    <td>
-                                        <?= $datos_libro_mayor["id_asiento"]; ?>
-                                    </td>
-                                    <td>
-                                        <?= $datos_libro_mayor["descripcion"]; ?>
-                                    </td>
-                                    <td>
-                                        <?= "$" . $datos_libro_mayor["debe"]; ?>
-                                    </td>
-                                    <td>
-                                        <?= "$" . $datos_libro_mayor["haber"]; ?>
-                                    </td>
-                                    <td>
-                                        <?= "$" . $datos_libro_mayor["saldo_parcial"]; ?>
-                                    </td>
-                                </tr>
-                            <?php
-                            }
+
+                        $sql_nombre_cuenta = $conexion->query("SELECT nombre FROM cuenta WHERE id_cuenta = $id_cuenta");
+                        $nombre_cuenta = $sql_nombre_cuenta->fetch_object()->nombre;
+
+                        echo "<h5 class='text-center mb-4'><span class='text-muted'>Cuenta:</span> <strong>$nombre_cuenta</strong></h5>";
+
+                        $sql_cruce_tablas = $conexion->query("
+                            SELECT a.id_asiento, a.descripcion, r.debe, r.haber, r.saldo_parcial
+                            FROM asiento a
+                            INNER JOIN registrar_asiento r ON a.id_asiento = r.id_asiento
+                            WHERE r.id_cuenta = $id_cuenta
+                        ");
+
+                        echo '<div class="table-responsive">';
+                        echo '<table class="table table-bordered text-center align-middle">';
+                        echo '<thead class="table-info">';
+                        echo '<tr>';
+                        echo '<th>Nro de Asiento</th>';
+                        echo '<th>Descripción</th>';
+                        echo '<th>Debe</th>';
+                        echo '<th>Haber</th>';
+                        echo '<th>Total</th>';
+                        echo '</tr>';
+                        echo '</thead>';
+                        echo '<tbody>';
+
+                        while ($datos = $sql_cruce_tablas->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>{$datos['id_asiento']}</td>";
+                            echo "<td>{$datos['descripcion']}</td>";
+                            echo "<td class='text-end'>$" . number_format($datos['debe'], 2, ',', '.') . "</td>";
+                            echo "<td class='text-end'>$" . number_format($datos['haber'], 2, ',', '.') . "</td>";
+                            echo "<td class='text-end'>$" . number_format($datos['saldo_parcial'], 2, ',', '.') . "</td>";
+                            echo "</tr>";
                         }
+
+                        echo '</tbody>';
+                        echo '</table>';
+                        echo '</div>';
+                    } else {
+                        echo "<div class='alert alert-warning text-center'>Cuenta no encontrada.</div>";
                     }
                 }
-
-            }
-            ?>
-        </tbody>
-
-    </table>
-
-    </div>
+                ?>
+            </div>
+        </div>
     </div>
 
 </body>

@@ -52,8 +52,8 @@
     } else {
         echo "<div class='alert alert-warning'>Error al ejecutar la consulta: " . $conexion->error . "</div>";
     }
-
-    $es_factura_a = ($cond_fiscal === 'Monotributista' || $cond_fiscal === 'Responsable inscripto');
+    echo "<div class='alert alert-info'>Factura N°: $cond_fiscal</div>";
+    $es_factura_a = ($cond_fiscal === 'Monotributista' || $cond_fiscal === 'Responsable inscripto' || $cond_fiscal === 'Consumidor Final' );
     ?>
     <div class="container mt-2" style="width: 700px;">
         <div class="d-flex ">

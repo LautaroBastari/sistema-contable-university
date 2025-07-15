@@ -1,19 +1,16 @@
 <?php
 session_start();
-
 require 'database.php';
 
 if (isset($_SESSION['user_id'])) {
     $records = $conn->prepare('SELECT id_usuario, email, password 
-                                    FROM usuarios 
-                                    WHERE id_usuario = :id_usuario');
-    //Prepare: Hace una consulta a la base de datos.
+                                FROM usuarios 
+                                WHERE id_usuario = :id_usuario');
     $records->bindParam(':id_usuario', $_SESSION['user_id']);
     $records->execute();
     $results = $records->fetch(PDO::FETCH_ASSOC);
 
     $user = null;
-
     if (is_array($results) && count($results) > 0) {
         $user = $results;
     }
@@ -21,94 +18,140 @@ if (isset($_SESSION['user_id'])) {
 ?>
 
 <!DOCTYPE html>
-<html>
-
+<html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <title>Inicio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>
-        Inicio
-    </title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/646ac4fad6.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap y otros recursos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-
-
-
+    <style>
+        .hover-shadow:hover {
+            transform: scale(1.03);
+            transition: 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+        }
+    </style>
 </head>
 
-<body>
+<body class="bg-light text-dark">
     <?php if (!empty($user)): ?>
-        <?php include './nav.php' ?>
-    <?php endif ?>
-    <div class="container border border-primary-light pt-5 pb-2 mb-5 mt-5 bg-light text-dark">
-        <div class="container text-center">
-            <?php if (!empty($user)): ?>
-                <div class="container mb-5 text-center">
-                    <img src="/php-login/assets/mk-asociados-low-resolution-logo-color-on-transparent-background.png"
-                        alt="MK Asociados" width="250" height="50" class="mb-4">
-                    <h1><b>Bienvenido
+        <?php include './nav.php'; ?>
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <img src="/php-login/assets/mk-asociados-low-resolution-logo-color-on-transparent-background.png"
+                     alt="MK Asociados" width="250" class="mb-3">
+                <h1 class="display-6">Bienvenido <strong><?= htmlspecialchars($user['email']) ?></strong></h1>
+                <p class="lead text-muted">Has ingresado correctamente. Puedes realizar estas operaciones:</p>
+            </div>
 
-                            <?= $user['email'] ?>
-                        </b>
-                    </h1>
-                    <hr class="container mt-4 mb-2 d-flex justify-content-center" style="width:70%">
-                    </hr>
-                    <br>Has ingresado correctamente.</br>
-                    <br>Puedes realizar estas operaciones:
-                    <div class="row row-cols-2  m-3">
-                        <div class="container border border-black bg-danger-subtle p-4">
-                            <i class="bi bi-table"></i>
-                            <a href="asientos.php">Asientos contables</a>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                <!-- Reutilizá este bloque cambiando icono/texto/enlace -->
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow text-center">
+                        <div class="card-body">
+                            <i class="bi bi-table fs-2 text-primary mb-2"></i>
+                            <h5 class="card-title">Asientos contables</h5>
+                            <a href="asientos.php" class="stretched-link"></a>
                         </div>
-                        <div class="container border border-black bg-info-subtle p-4">
-                            <i class="bi bi-table"></i>
-                            <a href="plandecuentas.php">Plan de cuentas</a>
-                        </div>
-                        <div class="container border border-black bg-info-subtle p-4">
-                            <i class="fa-sharp fa-solid fa-book "></i>
-                            <a href="libroDiario.php">Libro Diario</a>
-                        </div>
-                        <div class="container border border-black bg-danger-subtle p-4">
-                            <i class="bi bi-book ms-2"></i>
-                            <a href="libroMayor.php">Libro Mayor</a>
-                        </div>
-                        <div class="container border border-black bg-danger-subtle p-4">
-                            <i class="bi bi-briefcase"></i>
-                            <a href="ventas.php">Registro de Ventas</a>
-                        </div>
-                        <div class="container border border-black bg-info-subtle p-4">
-                            <i class="bi bi-file-bar-graph"></i>
-                            <a href="clientes.php">Administración de Clientes</a>
-                        </div>
-                        <div class="container border border-black bg-info-subtle p-4">
-                            <i class="bi bi-archive"></i>
-                            <a href="stock.php">Administración de Stock</a>
-                        </div>
-                        <div class="container border border-black bg-danger-subtle p-4">
-                            <i class="bi bi-card-list"></i>
-                            <a href="informeVentas.php">Informe de Ventas</a>
-                        </div>
-                        <div class="container border border-black p-4">
-                            <i class="bi bi-escape"></i>
-                            <a href="logout.php">Cerrar Sesión</a>
-                        </div>
+                    </div>
+                </div>
 
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow text-center">
+                        <div class="card-body">
+                            <i class="bi bi-table fs-2 text-info mb-2"></i>
+                            <h5 class="card-title">Plan de cuentas</h5>
+                            <a href="plandecuentas.php" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow text-center">
+                        <div class="card-body">
+                            <i class="bi bi-book fs-2 text-success mb-2"></i>
+                            <h5 class="card-title">Libro Diario</h5>
+                            <a href="libroDiario.php" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow text-center">
+                        <div class="card-body">
+                            <i class="bi bi-journal fs-2 text-warning mb-2"></i>
+                            <h5 class="card-title">Libro Mayor</h5>
+                            <a href="libroMayor.php" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow text-center">
+                        <div class="card-body">
+                            <i class="bi bi-briefcase fs-2 text-danger mb-2"></i>
+                            <h5 class="card-title">Registro de Ventas</h5>
+                            <a href="ventas.php" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow text-center">
+                        <div class="card-body">
+                            <i class="bi bi-people fs-2 text-secondary mb-2"></i>
+                            <h5 class="card-title">Clientes</h5>
+                            <a href="clientes.php" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow text-center">
+                        <div class="card-body">
+                            <i class="bi bi-box-seam fs-2 text-primary mb-2"></i>
+                            <h5 class="card-title">Stock</h5>
+                            <a href="stock.php" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow text-center">
+                        <div class="card-body">
+                            <i class="bi bi-bar-chart-line fs-2 text-success mb-2"></i>
+                            <h5 class="card-title">Informe de Ventas</h5>
+                            <a href="informeVentas.php" class="stretched-link"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cierre sesión -->
+                <div class="col">
+                    <div class="card h-100 border border-danger shadow-sm text-center">
+                        <div class="card-body">
+                            <i class="bi bi-box-arrow-right fs-2 text-danger mb-2"></i>
+                            <h5 class="card-title">Cerrar Sesión</h5>
+                            <a href="logout.php" class="stretched-link"></a>
+                        </div>
                     </div>
                 </div>
 
             </div>
         </div>
     <?php else: ?>
-        <div class="container border border-primary-light pt-5 pb-2 mb-5 mt-5 bg-danger-subtle text-dark">
-            <h1>¡Bienvenido a nuestro Sistema Contable!</h1>
-            <h4>Por favor, ingresa a tu cuenta o registrate en el caso que no tengas una</h4>
-            <a href="login.php">Ingresar</a> o
-            <a href="signup.php">Registrarme</a>
+        <div class="container py-5 text-center">
+            <div class="alert alert-warning shadow-sm">
+                <h2 class="mb-3">¡Bienvenido a nuestro Sistema Contable!</h2>
+                <p class="mb-3">Por favor, ingresa a tu cuenta o registrate si aún no tenés una.</p>
+                <a href="login.php" class="btn btn-primary me-2">Ingresar</a>
+                <a href="signup.php" class="btn btn-outline-primary">Registrarme</a>
+            </div>
         </div>
     <?php endif; ?>
 
 </body>
-
 </html>
