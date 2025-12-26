@@ -74,4 +74,53 @@ No utiliza frameworks pesados, con el objetivo de demostrar dominio de **PHP pur
 
 ---
 
+## Estructura del Proyecto (orientativa)
 
+config/ -> configuración y conexión a base de datos
+controllers/ -> lógica de negocio
+models/ -> acceso a datos
+views/ -> interfaz de usuario
+database/ -> scripts SQL
+public/ -> punto de entrada de la aplicación
+
+
+---
+
+## Flujo Contable
+
+### Venta
+1. Se registra la venta
+2. Se descuenta stock
+3. Se genera el asiento contable
+4. Se registra en Libro Diario
+5. Se refleja en Libro Mayor
+
+### Compra
+1. Se registra la compra
+2. Se incrementa stock
+3. Se genera el asiento contable
+4. Se actualizan los libros contables
+
+---
+
+## Objetivo del Proyecto
+
+Demostrar capacidad para diseñar e implementar un **sistema de gestión real**, integrando:
+
+- Operación comercial
+- Contabilidad básica correcta
+- Persistencia de datos
+- Validaciones y control
+
+Orientado a pequeños y medianos comercios.
+
+---
+
+## Estado del Proyecto
+
+Proyecto funcional, con mejoras en curso orientadas a:
+- Reportes contables avanzados
+- Exportación de información
+- Auditoría y control
+
+---
