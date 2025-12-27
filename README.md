@@ -1,4 +1,4 @@
-# Sistema Contable Web – Portfolio
+# Sistema Contable Web – Trabajo final de Analista en Sistemas
 
 Sistema contable y de gestión desarrollado como **proyecto de portfolio**, con el objetivo de demostrar **lógica de negocio real**, **integridad contable** y **buenas prácticas** en aplicaciones web desarrolladas con **PHP y MySQL**, sin frameworks externos.
 
