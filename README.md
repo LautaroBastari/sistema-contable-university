@@ -1,27 +1,70 @@
 # Sistema Contable Web – Portfolio
 
-Sistema contable y de gestión desarrollado como **proyecto de portfolio**, enfocado en **lógica de negocio real**, **integridad contable** y **buenas prácticas** en aplicaciones web con **PHP y MySQL**.
+Sistema contable y de gestión desarrollado como **proyecto de portfolio**, con el objetivo de demostrar **lógica de negocio real**, **integridad contable** y **buenas prácticas** en aplicaciones web desarrolladas con **PHP y MySQL**, sin frameworks externos.
 
-El sistema cubre el circuito completo de un comercio: **ventas, compras, stock, facturación y contabilidad**, con generación automática de **asientos contables**, **Libro Diario** y **Libro Mayor**.
+El sistema implementa el **circuito completo de un comercio**, integrando **operación comercial y contabilidad**, con generación automática de **asientos contables**, **Libro Diario** y **Libro Mayor**, manteniendo consistencia y trazabilidad de la información.
 
 ---
 
-## Qué resuelve este sistema
+## Alcance del Sistema
 
-- Centraliza la operación diaria (ventas y stock)
-- Automatiza la contabilidad básica
-- Mantiene trazabilidad entre operación y contabilidad
-- Reduce errores manuales mediante validaciones y reglas de negocio
+El sistema permite:
+
+- Gestionar ventas, compras y stock
+- Automatizar la generación de asientos contables
+- Mantener libros contables consistentes
+- Controlar accesos mediante roles de usuario
+- Reducir errores manuales mediante validaciones y reglas de negocio
+
+Está orientado a **pequeños y medianos comercios**, priorizando control interno, claridad operativa y correcta registración contable.
+
+---
+
+## Capturas del Sistema
+
+### Panel Principal
+Vista general del sistema con acceso a los módulos operativos y contables.
+
+![Panel principal](docs/screenshots/home.PNG)
+
+---
+
+### Registro de Ventas
+Gestión de ventas con impacto directo en stock y contabilidad, incluyendo generación de comprobantes.
+
+![Registro de ventas](docs/screenshots/ventas.PNG)
+
+---
+
+### Libro Diario
+Registro cronológico de los asientos contables, respetando el esquema **Debe / Haber**.
+
+![Libro Diario](docs/screenshots/libro-diario.PNG)
+
+---
+
+### Libro Mayor
+Consulta de movimientos y saldos por cuenta contable, con acumulados.
+
+![Libro Mayor](docs/screenshots/libro-mayor.PNG)
+
+---
+
+### Administración de Stock
+Control de inventario integrado al circuito de ventas y compras.
+
+![Stock](docs/screenshots/stock.PNG)
 
 ---
 
 ## Funcionalidades Principales
 
-### Operación
+### Operación Comercial
+
 - **Ventas**
-  - Registro con detalle de productos
+  - Registro detallado de productos
   - Cálculo automático de totales
-  - Impacto directo en stock
+  - Impacto inmediato en stock
 - **Compras**
   - Registro de compras
   - Actualización automática de inventario
@@ -31,23 +74,30 @@ El sistema cubre el circuito completo de un comercio: **ventas, compras, stock, 
 - **Facturación**
   - Emisión y registro de comprobantes
 
+---
+
 ### Contabilidad
+
 - **Asientos contables automáticos**
-  - Cada venta y compra genera su asiento correspondiente
-  - Validación de balance (**Debe = Haber**)
+  - Cada venta o compra genera su asiento correspondiente
+  - Validación estricta de balance (**Debe = Haber**)
 - **Libro Diario**
-  - Registro cronológico de asientos
+  - Visualización cronológica de asientos
   - Filtros por período
 - **Libro Mayor**
-  - Movimientos y saldos por cuenta
+  - Movimientos y saldos por cuenta contable
 - **Plan de cuentas**
   - Configurable según el negocio
 
-### Seguridad y Calidad
-- **Sistema de login**
+---
+
+### Seguridad y Control
+
+- Sistema de autenticación
 - **Roles de usuario** (administrador / operador)
-- **Validaciones de datos y reglas de negocio**
-- **Trazabilidad de operaciones** (usuario y fecha)
+- Restricción de acciones según rol
+- Validaciones de datos
+- Trazabilidad de operaciones (usuario y fecha)
 
 ---
 
@@ -57,32 +107,52 @@ El sistema cubre el circuito completo de un comercio: **ventas, compras, stock, 
 - **MySQL** – persistencia de datos
 - **phpMyAdmin** – administración de base de datos
 - **Bootstrap** – interfaz responsive
+- **XAMPP** – entorno de desarrollo local
 
 ---
 
 ## Enfoque Técnico
 
-Este proyecto prioriza:
+El proyecto está desarrollado en **PHP procedural**, organizado por responsabilidades, sin el uso de frameworks externos.
+
+Se prioriza:
 
 - Modelado correcto de datos
-- Separación entre lógica, datos e interfaz
+- Separación lógica entre operación, contabilidad y presentación
 - Reglas contables consistentes
 - Automatización de procesos críticos
-- Código claro y mantenible
+- Código claro, legible y mantenible
 
-No utiliza frameworks pesados, con el objetivo de demostrar dominio de **PHP puro**, **SQL** y **lógica de negocio**.
+El objetivo es demostrar dominio de **PHP puro**, **SQL** y **lógica de negocio**, evitando abstracciones innecesarias.
 
 ---
 
-## Estructura del Proyecto (orientativa)
+## Estructura del Proyecto
 
-config/ -> configuración y conexión a base de datos
-controllers/ -> lógica de negocio
-models/ -> acceso a datos
-views/ -> interfaz de usuario
-database/ -> scripts SQL
-public/ -> punto de entrada de la aplicación
+La estructura del repositorio refleja una organización simple y clara, acorde a un entorno PHP sin framework:
 
+assets/ -> recursos estáticos (imágenes, estilos, íconos)
+controlador/ -> lógica de negocio y acciones (altas, bajas, modificaciones)
+partials/ -> componentes reutilizables (navbar, header, etc.)
+docs/ -> documentación y capturas del sistema
+
+conexionPDC.php / database.php
+-> conexión a la base de datos
+
+home.php, index.php, login.php
+-> pantallas principales y navegación
+
+asientos.php, libroDiario.php, libroMayor.php
+-> módulos contables
+
+ventas.php, informeVentas.php
+-> operación comercial
+
+clientes.php, stock.php
+-> gestión de maestros
+
+
+La estructura prioriza **claridad**, **trazabilidad del flujo** y **mantenibilidad**, manteniendo el proyecto simple y entendible.
 
 ---
 
@@ -92,8 +162,8 @@ public/ -> punto de entrada de la aplicación
 1. Se registra la venta
 2. Se descuenta stock
 3. Se genera el asiento contable
-4. Se registra en Libro Diario
-5. Se refleja en Libro Mayor
+4. Se registra en el Libro Diario
+5. Se refleja en el Libro Mayor
 
 ### Compra
 1. Se registra la compra
@@ -105,22 +175,19 @@ public/ -> punto de entrada de la aplicación
 
 ## Objetivo del Proyecto
 
-Demostrar capacidad para diseñar e implementar un **sistema de gestión real**, integrando:
+Demostrar la capacidad de diseñar e implementar un **sistema de gestión real**, integrando:
 
 - Operación comercial
 - Contabilidad básica correcta
 - Persistencia de datos
-- Validaciones y control
-
-Orientado a pequeños y medianos comercios.
+- Validaciones y control interno
 
 ---
 
 ## Estado del Proyecto
 
-Proyecto funcional, con mejoras en curso orientadas a:
+Proyecto **funcional**, con mejoras en curso orientadas a:
+
 - Reportes contables avanzados
 - Exportación de información
 - Auditoría y control
-
----
