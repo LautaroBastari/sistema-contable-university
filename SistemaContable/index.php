@@ -43,8 +43,13 @@ if (isset($_SESSION['user_id'])) {
             <div class="text-center mb-5">
                 <img src="/php-login/assets/mk-asociados-low-resolution-logo-color-on-transparent-background.png"
                      alt="MK Asociados" width="250" class="mb-3">
-                <h1 class="display-6">Bienvenido <strong><?= htmlspecialchars($user['email']) ?></strong></h1>
-                <p class="lead text-muted">Has ingresado correctamente. Puedes realizar estas operaciones:</p>
+                    <h2 class="h5 mb-1 text-muted">
+                    Bienvenido
+                    <span class="fw-semibold text-dark"><?= htmlspecialchars($user['email']) ?></span>
+                    </h2>
+                    <p class="small text-muted mb-0">
+                    Has ingresado correctamente. Seleccioná una operación para continuar.
+                    </p>
             </div>
 
             <div class="row row-cols-1 row-cols-md-3 g-4">
