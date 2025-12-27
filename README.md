@@ -191,3 +191,6 @@ Proyecto **funcional**, con mejoras en curso orientadas a:
 - Reportes contables avanzados
 - Exportación de información
 - Auditoría y control
+
+##Documentacion<br>
+https://drive.google.com/drive/folders/1ROyFuz2DuQomwt8iiL6bmKo52x8VZIuo?hl=es-419
