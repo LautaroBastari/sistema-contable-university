@@ -23,7 +23,6 @@ $id_usuario = $_SESSION['user_id'];
         <div class="card shadow rounded">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    
                     <button class="btn btn-outline-secondary" onclick="window.history.back();">
                         <i class="bi bi-caret-left-fill"></i>
                     </button>
